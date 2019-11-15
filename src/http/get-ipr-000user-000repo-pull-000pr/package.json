@@ -1,0 +1,7 @@
+{
+  "name": "begin-app-get-ipr-000user-000repo-pull-000pr",
+  "dependencies": {
+    "@architect/functions": "latest",
+    "@begin/data": "latest"
+  }
+}
