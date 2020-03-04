@@ -5,7 +5,7 @@ wander-qka
 
 @http
 get /
-get /ipr/:user/:repo/pull/:pr
+get /ipr/:user/:repo/pull/:prEtc
 
 @tables
 data
