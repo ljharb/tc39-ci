@@ -90,8 +90,9 @@ exports.handler = async function http(req) {
 
 	return {
 		headers: {
-			'content-type': `${format === 'json' ? 'application/json' : 'text/html'}; charset=utf8`
+			'content-type': `${format === 'json' ? 'application/json' : 'text/html'}; charset=utf8`,
 		},
-		body: formatters[format]({ user, repo, pr, sha, result: success || result, success })
+		body: formatters[format]({ user, repo, pr, sha, result: success || result, success }),
+		statusCode: success ? 200 : 412,
 	};
 };
