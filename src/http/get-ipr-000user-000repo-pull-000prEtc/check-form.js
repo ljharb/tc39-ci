@@ -41,7 +41,9 @@ const request = async (url, method = 'GET', postData) => {
 
 	return new Promise((resolve, reject) => {
 		const req = lib.request(url, params, res => {
-			if (res.statusCode < 200 || res.statusCode >= 300) {
+			if (res.statusCode >= 300 && res.statusCode < 400) {
+				return resolve(request(res.headers.location, method, postData));
+			} else if (res.statusCode < 200 || res.statusCode >= 300) {
 				return reject(new Error(`Status Code: ${res.statusCode}; ${url}`));
 			}
 
@@ -89,32 +91,47 @@ function getMembers(teamID, page = 1) {
 const delegates = request(teamURL).then((json) => JSON.parse(json)).then(data => {
 	return getMembers(data.id);
 }).then((data) => {
-	const delegateNames = new Set(data.map(x => x.login));
-	console.log(`Found delegates: ${[...delegateNames].join(',')}\n`);
-	return delegateNames;
+	const delegateNames = data.map(x => x.login);
+	console.log(`Found delegates: ${delegateNames.join(',')}\n`);
+	return new Set(delegateNames);
 });
+
+function isGoogler(username) {
+	return request(`https://api.github.com/orgs/googlers/members/${username}`).then(
+		() => {
+			console.log(`${username} is a googler`);
+			return true;
+		},
+		(e) => {
+			console.log(`${username} is not a googler`);
+			return false;
+		},
+	);
+}
 
 const usernames = request(sheetData).then((json) => JSON.parse(json)).then(data => {
 	if (!Array.isArray(data.values)) {
 		throw 'invalid data';
 	}
-	const usernames = new Set(
-		data.values
-			.flat(1)
-			.map(x => x.replace(/^(https?:\/\/)?github\.com\//, '').replace(/^@/, ''))
-			.filter(x => /^[a-z0-9_-]{1,39}$/gi.test(x))
-			.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-	);
-	console.log('Found usernames: ' + [...usernames].join(',') + '\n');
-	return usernames;
+	const usernames = data.values
+		.flat(1)
+		.map(x => x.replace(/^(https?:\/\/)?github\.com\//, '').replace(/^@/, ''))
+		.filter(x => /^[a-z0-9_-]{1,39}$/gi.test(x))
+		.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+	console.log('Found usernames: ' + usernames.join(',') + '\n');
+	return new Set(usernames);
 });
 
-Promise.all([usernames, authors, delegates]).then(([usernames, authors, delegates]) => {
-	const missing = authors.filter(a => !usernames.has(a) && !delegates.has(a));
+const googlers = authors
+	.then((authors) => Promise.all(authors.map(author => isGoogler(author).then(is => [author, is]))))
+	.then(entries => new Map(entries));
+
+Promise.all([usernames, authors, delegates, googlers]).then(([usernames, authors, delegates, googlers]) => {
+	const missing = authors.filter(a => !usernames.has(a) && !delegates.has(a) && !googlers.get(a));
 	if (missing.length > 0) {
 		throw `Missing authors: ${missing}`;
 	} else {
-		console.log('All authors have signed the form, or are delegates!');
+		console.log('All authors have signed the form, or are delegates, or employed by an ECMA member company!');
 	}
 }).catch((e) => {
 	console.error(e);

@@ -28,7 +28,7 @@ function html({ user, repo, pr, sha, result, success }) {
 		</h6>
 	${success ? `
 	<p class="center-text" style="color: green">
-	All authors on this PR are either delegates, or have registered as a TC39 RFTG Contributor!
+	All authors on this PR are either delegates, ECMA member company employees, or have registered as a TC39 RFTG Contributor!
 	</p>
 	` : `
 	<p class="center-text" style="color: red">
