@@ -1,0 +1,8 @@
+{
+  "name": "begin-app-get-preview-000user-000repo-pull-000pr",
+  "dependencies": {
+    "@architect/functions": "latest",
+    "@begin/data": "latest",
+    "github-api": "^3.3.0"
+  }
+}
