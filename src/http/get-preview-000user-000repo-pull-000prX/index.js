@@ -50,6 +50,30 @@ async function getSHA(user, repo, pr) {
 	return sha;
 }
 
+async function renderSpec(sha) {
+}
+
+async function getOrSetData(sha) {
+	const result = await data.get({
+		table: 'sha',
+		key: sha,
+	});
+
+	if (result) {
+		return result;
+	}
+
+	const html = await renderSpec(sha);
+	if (html) {
+		await data.set({
+			table: 'sha',
+			key: sha,
+			html,
+		});
+	}
+	return { html };
+}
+
 // HTTP function
 exports.handler = async function http(req) {
 	const { user, repo, prX } = req.pathParameters;
@@ -66,15 +90,14 @@ exports.handler = async function http(req) {
 			throw new Error('Unable to connect to Github');
 		});
 
-		result = await data.get({
-			table: 'sha',
-			key: sha,
-		});
+		result = await getOrSetData(sha);
 
-		success = true;
+		success = typeof result.html === 'string';
 	} catch (e) {
 		result = e.message.split('\n').slice(1, -1).join('\n');
 	}
+
+	console.log(success, result);
 
 	return {
 		headers: {
