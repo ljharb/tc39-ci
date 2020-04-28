@@ -1,6 +1,6 @@
 # Begin basic Hello World! app
 
-[![Begin build status](https://buildstatus.begin.app/wander-qka/status.svg)](https://begin.com)
+[![Begin build status](https://buildstatus.begin.app/river-xt6/status.svg)](https://begin.com)
 
 ## Getting started
 - Start the local dev server: `npm start`
