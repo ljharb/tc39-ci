@@ -16,5 +16,6 @@
     "tap-spec": "^5.0.0",
     "tape": "^5.0.0",
     "tiny-json-http": "^7.1.2"
-  }
+  },
+  "private": true
 }

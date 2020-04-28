@@ -4,10 +4,9 @@ wander-qka
 @static
 
 @http
-get  /                                  # Handle PR / SHA requests
-get  /ipr/:user/:repo/pull/:prEtc       # tbd
-get  /preview/:user/:repo/pull/:prX     # tbd
-post /pr                                # Publish new files
+get  /ipr/:user/:repo/pull/:prEtc       # IPR check
+get  /preview/:u/:r/:k/:etc     # display a PR/SHA preview
+post /preview/:user/:repo       # Publish new files
 
 @tables
 data
