@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "glob": "^7.1.6",
+    "mime-types": "^2.1.27",
+    "tiny-json-http": "^7.1.2"
+  }
+}
