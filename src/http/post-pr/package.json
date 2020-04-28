@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@architect/functions": "^3.9.0",
+    "@begin/data": "^1.2.2",
+    "mime-types": "^2.1.27",
+    "tiny-json-http": "^7.1.2"
+  }
+}

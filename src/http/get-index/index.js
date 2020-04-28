@@ -1,73 +1,50 @@
-// Add simple, fast, scalable persistence: https://docs.begin.com/en/data/begin-data/
-// let data = require('@begin/data')
+let arc = require('@architect/functions');
+let data = require('@begin/data');
+let validate = require('./_validate');
 
-// Add secure sessions, middleware, and more: https://docs.begin.com/en/functions/http/
-// let arc = require('@architect/functions')
+async function handler (req) {
+  try {
+    let { path } = req;
 
-// TODO: modify the body object!
-let body = `
-<!doctype html>
-<html lang=en>
-  <head>
-    <meta charset=utf-8>
-    <title>Hi!</title>
-    <link rel="stylesheet" href="https://static.begin.app/starter/default.css">
-    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" rel="icon" type="image/x-icon">
-  </head>
-  <body>
+    let parts = path.split('/').filter(Boolean);
 
-    <h1 class="center-text">
-      <!-- ↓ Change "Hello world!" to something else and head on back to Begin! -->
-      Hello world!
-    </h1>
+    // SHA paths
+    let isSHA = parts[0] === 'ecma262-preview-sha';
+    if (isSHA) {
+      // These URLs' contents are immutable so cache 'em forever
+      let cacheControl = 'max-age=315360000';
+      let proxy = arc.http.proxy.public({ cacheControl });
+      return proxy(req);
+    }
 
-    <p class="center-text">
-      Your <a href="https://begin.com" class="link" target="_blank">Begin</a> app is ready to go!
-    </p>
+    // PR paths
+    let isPR = parts[0] === 'ecma262-preview-pr';
+    if (isPR) {
+      let pr = await data.get({
+        table: 'pr',
+        key: parts[1]
+      });
+      if (pr) {
+        return {
+          location: `/ecma262-preview-sha/${pr.sha}/`
+        };
+      }
+    }
 
-  </body>
-</html>
-`;
-
-exports.handler = async function http(req) {
-  return {
-    headers: {
-      'content-type': 'text/html; charset=utf8',
-      'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
-    },
-    body
-  };
-};
-
-// Example responses
-
-/* Forward requester to a new path
-exports.handler = async function http (req) {
-  return {
-    statusCode: 302,
-    headers: {'location': '/about'}
+    // idk
+    return {
+      statusCode: 404,
+      headers: {
+        'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
+        'content-type': 'text/html; charset=utf8'
+      },
+      body: '404'
+    };
+  }
+  catch (err) {
+    console.log(`Error: ${req}`);
+    throw err;
   }
 }
-*/
 
-/* Respond with successful resource creation, CORS enabled
-let arc = require('@architect/functions')
-exports.handler = arc.http.async (http)
-async function http (req) {
-  return {
-    statusCode: 201,
-    headers: {'content-type': 'application/json; charset=utf8'},
-    body: JSON.stringify({ok: true}),
-    cors: true,
-  }
-}
-*/
-
-/* Deliver client-side JS
-exports.handler = async function http (req) {
-  return {
-    headers: {'content-type': 'text/javascript; charset=utf8'},
-    body: 'console.log("Hello world!")',
-  }
-}
-*/
+exports.handler = arc.http.async(validate, handler);

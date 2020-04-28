@@ -5,15 +5,16 @@
   "scripts": {
     "lint": "eslint . --ignore-pattern node_modules --fix",
     "start": "cross-env NODE_ENV=testing npx sandbox",
-    "test": "cross-env NODE_ENV=testing PORT=6666 tape test/*-test.js ./test/**/*-test.js | tap-spec"
+    "test": "cross-env NODE_ENV=testing PORT=6666 tape test/*-test.js ./test/**/*-test.js | tap-spec",
+    "publish": "node tools/publish-preview.js"
   },
   "devDependencies": {
-    "@architect/sandbox": "^1.9.2",
+    "@architect/sandbox": "^1.9.5",
     "@begin/data": "latest",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "tap-spec": "^5.0.0",
-    "tape": "^5.0.0-next.5",
+    "tape": "^5.0.0",
     "tiny-json-http": "^7.1.2"
   }
 }
