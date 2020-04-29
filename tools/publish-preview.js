@@ -1,3 +1,5 @@
+'use strict';
+
 const { join } = require('path');
 const glob = require('glob').sync;
 const tiny = require('tiny-json-http');
@@ -8,11 +10,11 @@ const { gzipSync } = require('zlib');
 const dir = join(__dirname, '..', 'out');
 const files = glob(join(dir, '**'), { nodir: true });
 
-async function go () {
+async function go() {
 	const data = {
 		pr: 1974,
 		sha: '4a3fa869b9acf25cccb5c4c2e6c5482cea4fd9f2',
-		files: []
+		files: [],
 	};
 	for (const file of files) {
 		const filename = file.replace(dir, '').substr(1);
@@ -20,8 +22,8 @@ async function go () {
 		const body = gzipSync(contents).toString('base64');
 		console.log(`Publishing: ${filename} (${body.length / 1000}KB)`);
 		data.files.push({
-			filename,
-			body,
+			filename: filename,
+			body: body,
 		});
 	}
 	const url = 'http://localhost:3333/preview/tc39/ecma262';
@@ -33,14 +35,16 @@ async function go () {
 		throw Error('Payloads must be under 6MB');
 	}
 
-  const token = process.env.CI_PREVIEW_TOKEN ? process.env.CI_PREVIEW_TOKEN : '';
-	const bearerToken = new Buffer.from(token).toString('base64');
+	const token = process.env.CI_PREVIEW_TOKEN ? process.env.CI_PREVIEW_TOKEN : '';
+	const bearerToken = Buffer.from(token).toString('base64');
 	const headers = {
-		authorization: `Bearer ${bearerToken}`
+		authorization: `Bearer ${bearerToken}`,
 	};
-	await tiny.post({ url, data, headers });
+	await tiny.post({
+		url: url, data: data, headers: headers,
+	});
 }
-go().catch((err) => {
+go()['catch']((err) => {
 	console.error(err);
 	process.exitCode = 1;
 });

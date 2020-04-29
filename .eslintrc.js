@@ -1,28 +1,29 @@
+'use strict';
+
 module.exports = {
-  env: {
-    node: true,
-    es6: true
-  },
-  extends: 'eslint:recommended',
-  parserOptions: {
-    ecmaVersion: 2018
-  },
-  rules: {
-    semi: ['error', 'always'],
-    // enable additional rules
-    'linebreak-style': ['error', 'unix'],
-    // node specific
-    'global-require': 'error',
-    'handle-callback-err': 'error',
-    // override default options for rules from base configurations
-    'no-cond-assign': ['error', 'always'],
-    // disable rules from base configurations
-    'arrow-body-style': 'off',
-    'no-console': 'off',
-    'no-inner-declarations': 'off',
-    'no-redeclare': 'off',
-    // style specific
-    'no-trailing-spaces': 'error',
-    'no-unused-vars': ['error', { 'args': 'none', 'ignoreRestSiblings': true }]
-  }
-}
+	env: {
+		node: true,
+		es6: true
+	},
+	extends: '@ljharb',
+	parserOptions: {
+		ecmaVersion: 2018,
+	},
+	rules: {
+		camelcase: ['error', {
+			properties: 'never',
+			ignoreDestructuring: false,
+			ignoreImports: false,
+			allow: []
+		}],
+		'comma-dangle': ['error', "always-multiline"],
+		'func-style': 'warn',
+		'handle-callback-err': 'error',
+		'max-len': 'off',
+		"max-statements-per-line": ['error', { max: 2 }],
+		'no-cond-assign': ['error', 'always'],
+		'no-console': 'off',
+		'no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: true }],
+		'sort-keys': 'off',
+	},
+};

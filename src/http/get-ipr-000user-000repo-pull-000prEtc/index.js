@@ -6,7 +6,9 @@ const GitHub = require('github-api');
 
 const gh = new GitHub();
 
-function html({ user, repo, pr, sha, result, success }) {
+function html({
+	user, repo, pr, sha, result, success,
+}) {
 	return `
 <!doctype html>
 <html lang="en">
@@ -48,8 +50,8 @@ function json(data) {
 }
 
 const formatters = {
-	html,
-	json,
+	html: html,
+	json: json,
 };
 
 const {
@@ -66,7 +68,9 @@ async function getSHA(user, repo, pr) {
 
 // HTTP function
 exports.handler = async function http(req) {
-	const { user, repo, prEtc } = req.pathParameters;
+	const {
+		user, repo, prEtc,
+	} = req.pathParameters;
 	const {
 		pr,
 		format = 'html',
@@ -76,12 +80,14 @@ exports.handler = async function http(req) {
 	let success = false;
 	let sha;
 	try {
-		sha = await getSHA(user, repo, pr).catch(() => {
+		sha = await getSHA(user, repo, pr)['catch'](() => {
 			throw new Error('Unable to connect to Github');
 		});
 
 		result = String(execSync(`node ${path.relative(process.cwd(), path.join(__dirname, './check-form'))} ${user}/${repo} ${sha}`, {
-			env: { ...process.env, GOOGLE_API_KEY, GH_TOKEN },
+			env: {
+				...process.env, GOOGLE_API_KEY: GOOGLE_API_KEY, GH_TOKEN: GH_TOKEN,
+			},
 		}));
 		success = true;
 	} catch (e) {
@@ -92,7 +98,9 @@ exports.handler = async function http(req) {
 		headers: {
 			'content-type': `${format === 'json' ? 'application/json' : 'text/html'}; charset=utf8`,
 		},
-		body: formatters[format]({ user, repo, pr, sha, result: success || result, success }),
+		body: formatters[format]({
+			user: user, repo: repo, pr: pr, sha: sha, result: success || result, success: success,
+		}),
 		statusCode: success ? 200 : 412,
 	};
 };

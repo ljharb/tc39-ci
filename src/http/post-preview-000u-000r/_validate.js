@@ -9,7 +9,7 @@ module.exports = function validate(req) {
 
 	// Only allow requests from the following orgs / owners
 	const allowed = ['tc39', 'tc39-transfer'];
-	if (!allowed.some(a => a === user)) {
+	if (!allowed.some((a) => a === user)) {
 		return {
 			statusCode: 400,
 		};
@@ -21,4 +21,5 @@ module.exports = function validate(req) {
 			statusCode: 400,
 		};
 	}
+	return void undefined;
 };

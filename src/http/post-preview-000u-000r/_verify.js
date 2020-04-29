@@ -7,7 +7,7 @@ const { get } = require('tiny-json-http');
  * Verify that the received payload is indeed a real PR + SHA
  * If so, pass it along
  */
-module.exports = async function verify (req) {
+module.exports = async function verify(req) {
 	try {
 		const { u: user, r: repo } = req.pathParameters;
 		const { pr, sha } = req.body;
@@ -15,10 +15,10 @@ module.exports = async function verify (req) {
 		const base = 'https://api.github.com';
 		const url = `${base}/repos/${user}/${repo}/pulls/${pr}/commits`;
 
-		const commits = await get({ url });
+		const commits = await get({ url: url });
 
 		// Is this an actual SHA on the repo?
-		const shaIsReal = commits.body.some(c => c.sha === sha);
+		const shaIsReal = commits.body.some((c) => c.sha === sha);
 
 		// Have we seen this SHA before and published its preview?
 		const shaHasBeenSeen = await data.get({
@@ -31,7 +31,7 @@ module.exports = async function verify (req) {
 				statusCode: 403,
 			};
 		}
-		return;
+		return void undefined;
 	} catch (err) {
 		return {
 			statusCode: 403,
