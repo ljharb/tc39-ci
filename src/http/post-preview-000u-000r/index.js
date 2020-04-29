@@ -11,11 +11,11 @@ const mime = require('mime-types');
 
 const isLocal = process.env.NODE_ENV === 'testing';
 
-async function pr (req) {
-	const { user, repo } = req.pathParameters;
+async function preview (req) {
+	const { u: user, r: repo } = req.pathParameters;
 	const { pr, sha, files } = req.body;
 
-	console.log(`Got new PR: ${user} / ${repo} / ${pr} / ${sha} / ${files.length}`);
+	console.log(`Got new preview payload: ${user} / ${repo} / ${pr} / ${sha} / ${files.length}`);
 
 	try {
 		// Look up two ways: via SHA, or via PR
@@ -78,4 +78,4 @@ async function pr (req) {
 	}
 }
 
-exports.handler = arc.http.async(validate, pr);
+exports.handler = arc.http.async(validate, preview);
