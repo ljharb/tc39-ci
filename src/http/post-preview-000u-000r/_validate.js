@@ -1,23 +1,22 @@
 'use strict';
 
+/**
+ * Ensure the payload is of the correct format and from an allowed GitHub org / owner
+ */
 module.exports = function validate(req) {
-	const isLocal = process.env.NODE_ENV === 'testing' || process.env.ARC_LOCAL;
-	try {
-		if (!isLocal) {
-			const auth = req.headers.authorization || req.headers.Authorization; // lolhttp
-			const token = String(new Buffer.from(auth.slice(7), 'base64'));
-			if (token !== process.env.CI_PREVIEW_TOKEN) {
-				throw Error('Auth request failed');
-			}
-		}
+	const { u: user } = req.pathParameters;
+	const payload = req.body;
 
-		const payload = req.body;
-		if (!payload.pr || !payload.sha || !payload.files) {
-			return {
-				statusCode: 400,
-			};
-		}
-	} catch (err) {
+	// Only allow requests from the following orgs / owners
+	const allowed = ['tc39', 'tc39-transfer'];
+	if (!allowed.some(a => a === user)) {
+		return {
+			statusCode: 400,
+		};
+	}
+
+	// Ensure the request is properly formed
+	if (!payload.pr || !payload.sha || !payload.files) {
 		return {
 			statusCode: 400,
 		};

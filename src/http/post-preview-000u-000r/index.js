@@ -3,10 +3,10 @@ const github = require('./_github-status');
 const { join, dirname, extname } = require('path');
 const { gunzipSync } = require('zlib');
 const aws = require('aws-sdk');
-aws.config.setPromisesDependency(null);
 const arc = require('@architect/functions');
 const data = require('@begin/data');
 const validate = require('./_validate');
+const verify = require('./_verify');
 const mime = require('mime-types');
 
 const isLocal = process.env.NODE_ENV === 'testing';
@@ -15,24 +15,12 @@ async function preview (req) {
 	const { u: user, r: repo } = req.pathParameters;
 	const { pr, sha, files } = req.body;
 
+	// Log the request so we know who to shake our fists at later
 	console.log(`Got new preview payload: ${user} / ${repo} / ${pr} / ${sha} / ${files.length}`);
+	const { body, ...sansBody } = req;
+	console.log(JSON.stringify(sansBody, null, 2));
 
 	try {
-		// Look up two ways: via SHA, or via PR
-		await data.set([
-			{
-				table: `${user}/${repo}/sha`,
-				key: sha,
-				pr,
-			},
-			{
-				table: `${user}/${repo}/pr`,
-				key: pr,
-				sha,
-			},
-		]);
-
-
 		if (!isLocal) {
 			await github({ state: 'pending', sha });
 			for (const file of files) {
@@ -64,8 +52,24 @@ async function preview (req) {
 				fs.writeFileSync(join(public, filename), data);
 			}
 		}
+
+		// To prevent replays, now make the preview for this SHA immutable (see: verify middleware)
+		// Look up two ways: via SHA, or via PR
+		await data.set([
+			{
+				table: `${user}/${repo}/sha`,
+				key: sha,
+				pr,
+			},
+			{
+				table: `${user}/${repo}/pr`,
+				key: pr,
+				sha,
+			},
+		]);
+
 		return {
-			statusCode: 200
+			statusCode: 200,
 		};
 	} catch (err) {
 		console.log(err);
@@ -78,4 +82,4 @@ async function preview (req) {
 	}
 }
 
-exports.handler = arc.http.async(validate, preview);
+exports.handler = arc.http.async(validate, verify, preview);

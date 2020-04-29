@@ -23,6 +23,6 @@ module.exports = {
     'no-redeclare': 'off',
     // style specific
     'no-trailing-spaces': 'error',
-    'no-unused-vars': ['error', { 'args': 'none' }]
+    'no-unused-vars': ['error', { 'args': 'none', 'ignoreRestSiblings': true }]
   }
 }

@@ -10,8 +10,8 @@ const files = glob(join(dir, '**'), { nodir: true });
 
 async function go () {
 	const data = {
-		pr: 9001, // Even testing values should be OVER 9000!!!
-		sha: 'c0a4289e43fb2e68c722a1e9c9b2b13b7058f754', // Also just for testing
+		pr: 1974,
+		sha: '4a3fa869b9acf25cccb5c4c2e6c5482cea4fd9f2',
 		files: []
 	};
 	for (const file of files) {
