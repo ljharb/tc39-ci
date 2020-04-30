@@ -12,7 +12,7 @@ async function handler(req) {
 	if (kind === 'sha') {
 		const {
 			sha,
-		} = etc.match(/^(?<sha>[1-9a-z][0-9a-z]+)\/?$/).groups || {};
+		} = etc.match(/^(?<sha>[0-9a-z]+)\/?$/).groups;
 		if (sha) {
 			// These URLs' contents are immutable so cache 'em forever
 			const cacheControl = 'max-age=315360000';
@@ -22,7 +22,7 @@ async function handler(req) {
 	}
 
 	if (kind === 'pull') {
-		const { pr } = etc.match(/^(?<pr>[1-9][0-9]+)\/?$/).groups || {};
+		const { pr } = etc.match(/^(?<pr>[1-9][0-9]+)\/?$/).groups;
 
 		const prData = await data.get({
 			table: `${user}/${repo}/pr`,
