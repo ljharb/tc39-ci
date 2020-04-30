@@ -80,7 +80,7 @@ exports.handler = async function http(req) {
 	let success = false;
 	let sha;
 	try {
-		sha = await getSHA(user, repo, pr)['catch'](() => {
+		sha = await getSHA(user, repo, pr).catch(() => {
 			throw new Error('Unable to connect to Github');
 		});
 

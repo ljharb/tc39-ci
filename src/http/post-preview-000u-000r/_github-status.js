@@ -3,7 +3,10 @@
 const { post } = require('tiny-json-http');
 
 const {
-	GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN, NODE_ENV,
+	GITHUB_OWNER,
+	GITHUB_REPO,
+	GITHUB_TOKEN,
+	NODE_ENV,
 } = process.env;
 
 module.exports = async function updateStatus({
@@ -15,12 +18,12 @@ module.exports = async function updateStatus({
 }) {
 
 	// verify state
-	let allow = [
+	const allow = [
 		'error',
 		'pending',
 		'success',
 	];
-	if (allow.includes(state) === false) { throw new ReferenceError('invalid state'); }
+	if (!allow.includes(state)) { throw new ReferenceError('invalid state'); }
 
 	if (!sha) { throw new ReferenceError('missing sha'); }
 
@@ -36,8 +39,8 @@ module.exports = async function updateStatus({
 
 	if (!GITHUB_TOKEN) { throw new ReferenceError('missing env var GITHUB_TOKEN'); }
 
-	let base = NODE_ENV === 'staging' ? 'staging.ci.tc39.es' : 'ci.tc39.es';
-	let data = {
+	const base = NODE_ENV === 'staging' ? 'staging.ci.tc39.es' : 'ci.tc39.es';
+	const data = {
 		state,
 		context: 'Begin.com build preview',
 	};

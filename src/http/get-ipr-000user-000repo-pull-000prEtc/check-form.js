@@ -122,7 +122,7 @@ const usernamesP = request(sheetData).then((json) => JSON.parse(json)).then((dat
 		.map((x) => x.replace(/^(https?:\/\/)?github\.com\//, '').replace(/^@/, ''))
 		.filter((x) => (/^[a-z0-9_-]{1,39}$/gi).test(x))
 		.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-	console.log('Found usernames: ' + usernames.join(',') + '\n');
+	console.log(`Found usernames: ${usernames.join(',')}\n`);
 	return new Set(usernames);
 });
 
@@ -142,7 +142,7 @@ Promise.all([
 	} else {
 		console.log('All authors have signed the form, or are delegates, or employed by an ECMA member company!');
 	}
-})['catch']((e) => {
+}).catch((e) => {
 	console.error(e);
 	process.exitCode = 1;
 });

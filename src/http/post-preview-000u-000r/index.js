@@ -16,7 +16,6 @@ const mime = require('mime-types');
 const isLocal = process.env.NODE_ENV === 'testing';
 
 /* eslint max-lines-per-function: 0 */
-// eslint-disable-next-line
 async function preview(req) {
 	const { u: user, r: repo } = req.pathParameters;
 	const {
@@ -40,7 +39,11 @@ async function preview(req) {
 			}
 		} else {
 			await github({
-				state: 'pending', sha, pr, user, repo,
+				state: 'pending',
+				sha,
+				pr,
+				user,
+				repo,
 			});
 			for (const file of files) {
 				const { filename, body } = file;
@@ -61,7 +64,11 @@ async function preview(req) {
 				await put.promise(); // eslint-disable-line no-await-in-loop
 			}
 			await github({
-				state: 'success', sha, pr, user, repo,
+				state: 'success',
+				sha,
+				pr,
+				user,
+				repo,
 			});
 		}
 
@@ -86,10 +93,14 @@ async function preview(req) {
 			statusCode: 200,
 		};
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 
 		await github({
-			state: 'error', sha, pr, user, repo,
+			state: 'error',
+			sha,
+			pr,
+			user,
+			repo,
 		});
 
 		return {

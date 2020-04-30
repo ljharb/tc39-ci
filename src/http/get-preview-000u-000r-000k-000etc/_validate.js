@@ -4,7 +4,7 @@ module.exports = function validate(req) {
 	const { path } = req;
 	const { k: kind, etc } = req.pathParameters;
 
-	let headers = {
+	const headers = {
 		'cache-control': 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
 		'content-type': 'text/html; charset=utf8',
 	};
@@ -15,7 +15,7 @@ module.exports = function validate(req) {
 		 * Seems a little hacky but it's only temporary until we implement non-trailing slash index.html peeking into arc/fns
 		 */
 		return {
-			location: req.path + '/',
+			location: `${req.path}/`,
 		};
 	}
 

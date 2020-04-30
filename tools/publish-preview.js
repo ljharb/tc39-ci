@@ -44,7 +44,7 @@ async function go() {
 		url, data, headers,
 	});
 }
-go()['catch']((err) => {
+go().catch((err) => {
 	console.error(err);
 	process.exitCode = 1;
 });
