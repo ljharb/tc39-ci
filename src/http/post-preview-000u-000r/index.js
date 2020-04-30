@@ -16,6 +16,7 @@ const mime = require('mime-types');
 const isLocal = process.env.NODE_ENV === 'testing';
 
 /* eslint max-lines-per-function: 0 */
+// eslint-disable-next-line
 async function preview(req) {
 	const { u: user, r: repo } = req.pathParameters;
 	const {

@@ -4,9 +4,10 @@ const arc = require('@architect/functions');
 const data = require('@begin/data');
 const validate = require('./_validate');
 
+// eslint-disable-next-line
 async function handler(req) {
 	const {
-		u: user, repo, k: kind, etc,
+		u: user, r: repo, k: kind, etc,
 	} = req.pathParameters;
 
 	if (kind === 'sha') {
