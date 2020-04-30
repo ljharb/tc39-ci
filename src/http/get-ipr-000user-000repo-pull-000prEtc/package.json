@@ -1,8 +1,7 @@
 {
-  "name": "begin-app-get-ipr-000user-000repo-pull-000pr",
   "dependencies": {
-    "@architect/functions": "latest",
-    "@begin/data": "latest",
+    "@architect/functions": "^3.9.0",
+    "@begin/data": "^1.2.2",
     "github-api": "^3.3.0"
   }
 }
