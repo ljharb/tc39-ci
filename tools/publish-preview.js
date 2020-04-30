@@ -22,8 +22,8 @@ async function go() {
 		const body = gzipSync(contents).toString('base64');
 		console.log(`Publishing: ${filename} (${body.length / 1000}KB)`);
 		data.files.push({
-			filename: filename,
-			body: body,
+			filename,
+			body,
 		});
 	}
 	const url = 'http://localhost:3333/preview/tc39/ecma262';
@@ -41,7 +41,7 @@ async function go() {
 		authorization: `Bearer ${bearerToken}`,
 	};
 	await tiny.post({
-		url: url, data: data, headers: headers,
+		url, data, headers,
 	});
 }
 go()['catch']((err) => {

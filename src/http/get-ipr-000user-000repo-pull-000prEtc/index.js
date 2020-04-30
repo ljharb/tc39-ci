@@ -50,8 +50,8 @@ function json(data) {
 }
 
 const formatters = {
-	html: html,
-	json: json,
+	html,
+	json,
 };
 
 const {
@@ -86,7 +86,7 @@ exports.handler = async function http(req) {
 
 		result = String(execSync(`node ${path.relative(process.cwd(), path.join(__dirname, './check-form'))} ${user}/${repo} ${sha}`, {
 			env: {
-				...process.env, GOOGLE_API_KEY: GOOGLE_API_KEY, GH_TOKEN: GH_TOKEN,
+				...process.env, GOOGLE_API_KEY, GH_TOKEN,
 			},
 		}));
 		success = true;
@@ -99,7 +99,7 @@ exports.handler = async function http(req) {
 			'content-type': `${format === 'json' ? 'application/json' : 'text/html'}; charset=utf8`,
 		},
 		body: formatters[format]({
-			user: user, repo: repo, pr: pr, sha: sha, result: success || result, success: success,
+			user, repo, pr, sha, result: success || result, success,
 		}),
 		statusCode: success ? 200 : 412,
 	};

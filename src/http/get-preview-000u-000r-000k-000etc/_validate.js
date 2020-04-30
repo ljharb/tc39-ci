@@ -24,7 +24,7 @@ module.exports = function validate(req) {
 	}
 
 	return {
-		headers: headers,
+		headers,
 		statusCode: 404,
 	};
 };

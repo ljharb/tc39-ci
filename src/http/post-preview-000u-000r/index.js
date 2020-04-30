@@ -39,7 +39,7 @@ async function preview(req) {
 				fs.writeFileSync(join(publicDir, filename), fileData);
 			}
 		} else {
-			await github({ state: 'pending', sha: sha });
+			await github({ state: 'pending', sha });
 			for (const file of files) {
 				const { filename, body } = file;
 
@@ -51,15 +51,17 @@ async function preview(req) {
 					ACL: 'public-read',
 					Key: `${process.env.ARC_STATIC_FOLDER}/preview/${user}/${repo}/sha/${sha}/${filename}`,
 					Bucket: process.env.ARC_STATIC_BUCKET,
-					Body: Body,
-					ContentType: ContentType,
+					Body,
+					ContentType,
 					ContentEncoding: 'gzip',
 				};
 				const put = s3.putObject(params);
 				await put.promise(); // eslint-disable-line no-await-in-loop
 			}
 			await github({
-				state: 'success', sha: sha, pr: pr,
+				state: 'success',
+				sha,
+				pr,
 			});
 		}
 
@@ -71,12 +73,12 @@ async function preview(req) {
 			{
 				table: `${user}/${repo}/sha`,
 				key: sha,
-				pr: pr,
+				pr,
 			},
 			{
 				table: `${user}/${repo}/pr`,
 				key: pr,
-				sha: sha,
+				sha,
 			},
 		]);
 
@@ -86,7 +88,7 @@ async function preview(req) {
 	} catch (err) {
 		console.log(err);
 
-		await github({ state: 'error', sha: sha });
+		await github({ state: 'error', sha });
 
 		return {
 			statusCode: 500,

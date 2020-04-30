@@ -32,7 +32,7 @@ module.exports = async function updateStatus({
 	let repo = process.env.GITHUB_REPO;
 	let token = process.env.GITHUB_TOKEN;
 
-	let data = { state: state };
+	let data = { state };
 
 	let target = `https://${process.env.ARC_STATIC_FOLDER}.begin.app/ecma262-preview-pr/${pr}`;
 	if (state === 'success') {
@@ -46,6 +46,6 @@ module.exports = async function updateStatus({
 	return post({
 		url: `${base}/repos/${owner}/${repo}/statuses/${sha}`,
 		headers: { Authorization: `token ${token}` },
-		data: data,
+		data,
 	});
 };

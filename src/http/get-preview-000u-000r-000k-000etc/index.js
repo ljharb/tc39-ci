@@ -16,7 +16,7 @@ async function handler(req) {
 		if (sha) {
 			// These URLs' contents are immutable so cache 'em forever
 			const cacheControl = 'max-age=315360000';
-			const proxy = arc.http.proxy['public']({ cacheControl: cacheControl });
+			const proxy = arc.http.proxy['public']({ cacheControl });
 			return proxy(req);
 		}
 	}

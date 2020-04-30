@@ -38,9 +38,9 @@ const request = async (url, method = 'GET', postData = undefined) => {
 	const [host, port] = h.split(':');
 
 	const params = {
-		host: host,
+		host,
 		port: port || url.startsWith('https://') ? 443 : 80,
-		method: method,
+		method,
 		headers: {
 			Authorization: `token ${process.env.GH_TOKEN}`,
 			'User-Agent': 'curl/7.54.0',

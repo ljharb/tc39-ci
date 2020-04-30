@@ -15,7 +15,7 @@ module.exports = async function verify(req) {
 		const base = 'https://api.github.com';
 		const url = `${base}/repos/${user}/${repo}/pulls/${pr}/commits`;
 
-		const commits = await get({ url: url });
+		const commits = await get({ url });
 
 		// Is this an actual SHA on the repo?
 		const shaIsReal = commits.body.some((c) => c.sha === sha);
