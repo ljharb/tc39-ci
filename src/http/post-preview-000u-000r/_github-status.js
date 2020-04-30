@@ -2,50 +2,60 @@
 
 const { post } = require('tiny-json-http');
 
+const {
+	GITHUB_OWNER, GITHUB_REPO, GITHUB_TOKEN, NODE_ENV,
+} = process.env;
+
 module.exports = async function updateStatus({
 	state,
-	sha,
 	pr,
+	sha,
+	user,
+	repo,
 }) {
 
 	// verify state
 	let allow = [
 		'error',
-		'failure',
 		'pending',
 		'success',
 	];
 	if (allow.includes(state) === false) { throw new ReferenceError('invalid state'); }
 
-	if (!sha) { throw new ReferenceError('invalid sha'); }
+	if (!sha) { throw new ReferenceError('missing sha'); }
+
+	if (!pr) { throw new ReferenceError('missing pr'); }
+
+	if (!repo) { throw new ReferenceError('missing repo'); }
 
 	if (state === 'success' && !pr) { throw new ReferenceError('missing pull request ID'); }
 
-	if (!process.env.GITHUB_OWNER) { throw new ReferenceError('missing env var GITHUB_OWNER'); }
+	if (!GITHUB_OWNER) { throw new ReferenceError('missing env var GITHUB_OWNER'); }
 
-	if (!process.env.GITHUB_REPO) { throw new ReferenceError('missing env var GITHUB_REPO'); }
+	if (!GITHUB_REPO) { throw new ReferenceError('missing env var GITHUB_REPO'); }
 
-	if (!process.env.GITHUB_TOKEN) { throw new ReferenceError('missing env var GITHUB_TOKEN'); }
+	if (!GITHUB_TOKEN) { throw new ReferenceError('missing env var GITHUB_TOKEN'); }
 
-	let base = 'https://api.github.com';
-	let owner = process.env.GITHUB_OWNER;
-	let repo = process.env.GITHUB_REPO;
-	let token = process.env.GITHUB_TOKEN;
+	let base = NODE_ENV === 'staging' ? 'staging.ci.tc39.es' : 'ci.tc39.es';
+	let data = {
+		state,
+		context: 'Begin.com build preview',
+	};
 
-	let data = { state };
+	if (state === 'error') { data.description = 'An error occurred'; }
 
-	let target = `https://${process.env.ARC_STATIC_FOLDER}.begin.app/ecma262-preview-pr/${pr}`;
+	if (state === 'pending') { data.description = 'Preparing deploy preview…'; }
+
 	if (state === 'success') {
-		Object.assign(data, {
-			target_url: target,
-			context: 'Begin.com build preview',
-			description: 'Ready!',
-		});
+		data.description = 'Preview ready!';
+		data.target_url = `https://${base}/preview/${user}/${repo}/pr/${pr}`;
 	}
 
+	const github = 'https://api.github.com';
 	return post({
-		url: `${base}/repos/${owner}/${repo}/statuses/${sha}`,
-		headers: { Authorization: `token ${token}` },
+		url: `${github}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/statuses/${sha}`,
+		headers: { Authorization: `token ${GITHUB_TOKEN}` },
 		data,
 	});
+
 };
