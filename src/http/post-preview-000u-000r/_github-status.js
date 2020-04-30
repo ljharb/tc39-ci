@@ -51,7 +51,7 @@ module.exports = async function updateStatus({
 
 	if (state === 'success') {
 		data.description = 'Preview ready!';
-		data.target_url = `https://${base}/preview/${user}/${repo}/pr/${pr}`;
+		data.target_url = `https://${base}/preview/${user}/${repo}/pull/${pr}`;
 	}
 
 	const github = 'https://api.github.com';
