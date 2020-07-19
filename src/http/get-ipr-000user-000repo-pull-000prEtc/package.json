@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@architect/functions": "^3.9.0",
-    "@begin/data": "^1.2.2",
+    "@architect/functions": "^3.12.1",
+    "@begin/data": "^1.2.3",
     "github-api": "^3.3.0"
   }
 }
