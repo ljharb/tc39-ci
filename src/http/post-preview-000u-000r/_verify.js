@@ -6,7 +6,7 @@ const { get } = require('tiny-json-http');
 const getCommits = async (url) => {
 	let page = 1;
 	const commits = [];
-	const urlPage = () => `${url}?page=${page}&per_page=100`;
+	const urlPage = () => `${url}${url.includes('?') ? '&' : '?'}page=${page}&per_page=100`;
 
 	const getter = async (getting) => {
 		const result = await get({ url: getting });
