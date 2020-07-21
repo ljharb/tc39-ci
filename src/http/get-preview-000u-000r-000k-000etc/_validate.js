@@ -11,8 +11,7 @@ module.exports = function validate(req) {
 
 	if (kind === 'sha' && etc.length === 40 && !path.endsWith('/')) {
 		/*
-		 * etc.length 40 == SHA URL request, and we need a trailing trailing slash
-		 * Seems a little hacky but it's only temporary until we implement non-trailing slash index.html peeking into arc/fns
+		 * etc.length 40 == SHA URL request, and we need a trailing trailing slash to ensure asset paths are valid to browsers
 		 */
 		return {
 			location: `${req.path}/`,
