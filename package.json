@@ -13,9 +13,9 @@
     "@begin/data": "^1.2.3",
     "@ljharb/eslint-config": "^17.3.0",
     "cross-env": "^7.0.3",
-    "eslint": "^7.15.0",
+    "eslint": "^7.17.0",
     "tap-spec": "^5.0.0",
-    "tape": "^5.0.1",
+    "tape": "^5.1.1",
     "tiny-json-http": "^7.3.0"
   },
   "private": true
