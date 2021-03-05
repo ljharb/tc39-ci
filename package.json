@@ -9,13 +9,13 @@
     "publish": "node tools/publish-preview.js"
   },
   "devDependencies": {
-    "@architect/sandbox": "^3.3.5",
+    "@architect/sandbox": "^3.3.7",
     "@begin/data": "^1.2.3",
-    "@ljharb/eslint-config": "^17.5.0",
+    "@ljharb/eslint-config": "^17.5.1",
     "cross-env": "^7.0.3",
-    "eslint": "^7.18.0",
+    "eslint": "^7.21.0",
     "tap-spec": "^5.0.0",
-    "tape": "^5.1.1",
+    "tape": "^5.2.2",
     "tiny-json-http": "^7.3.0"
   },
   "private": true
