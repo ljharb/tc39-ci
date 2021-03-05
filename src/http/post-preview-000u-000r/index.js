@@ -3,9 +3,18 @@
 const fs = require('fs');
 const github = require('./_github-status');
 const {
-	join, dirname, extname,
+	join,
+	dirname,
+	extname,
 } = require('path');
-const { gunzipSync } = require('zlib');
+const {
+	gzipSync,
+	gunzipSync,
+	brotliDecompressSync,
+} = require('zlib');
+const { Readable } = require('stream');
+
+const tar = require('tar-stream');
 const aws = require('aws-sdk');
 const arc = require('@architect/functions');
 const data = require('@begin/data');
@@ -15,18 +24,67 @@ const mime = require('mime-types');
 
 const isLocal = process.env.NODE_ENV === 'testing';
 
-/* eslint max-lines-per-function: 0 */
-// eslint-disable-next-line
+/*
+ * takes a buffer holding a brotli-compressed tar and returns a list of { filename, body } objects
+ * where each body is a buffer with a gzip-encoded representation of the corresponding file
+ */
+async function brotliOfListToListOfGzip(compressed) {
+	return new Promise((resolve, reject) => {
+		const files = [];
+		const extract = tar.extract();
+
+		extract.on('entry', (header, stream, next) => {
+			if (header.type !== 'file') {
+				stream.on('end', () => {
+					next();
+				});
+				stream.resume();
+				return;
+			}
+
+			// this is apparently the simplest way to drain a stream to a buffer???
+			const chunks = [];
+			stream.on('data', (chunk) => chunks.push(chunk));
+			stream.on('error', reject);
+			stream.on('end', () => {
+				files.push({
+					filename: header.name,
+					body: gzipSync(Buffer.concat(chunks)),
+				});
+				next();
+			});
+			stream.resume();
+		});
+
+		extract.on('finish', () => {
+			resolve(files);
+		});
+
+		Readable.from(brotliDecompressSync(Buffer.from(compressed, 'base64')))
+			.pipe(extract);
+	});
+}
+
+/* eslint max-lines-per-function: 0, max-statements: 0 */
 async function preview(req) {
 	const { u: user, r: repo } = req.pathParameters;
+	let { files } = req.body;
 	const {
-		pr, sha, files,
+		pr,
+		sha,
+		compressed,
 	} = req.body;
 
 	// Log the request so we know who to shake our fists at later
-	console.log(`Got new preview payload: ${user} / ${repo} / ${pr} / ${sha} / ${files.length}`);
+	console.log(`Got new preview payload: ${user} / ${repo} / ${pr} / ${sha} / ${compressed ? '(compressed)' : files.length}`);
 	const { body: _, ...sansBody } = req;
 	console.log(JSON.stringify(sansBody, null, 2));
+
+	if (compressed == null) {
+		files = files.map(({ filename, body }) => ({ filename, body: Buffer.from(body, 'base64') }));
+	} else {
+		files = await brotliOfListToListOfGzip(compressed);
+	}
 
 	try {
 		if (isLocal) {
@@ -34,7 +92,7 @@ async function preview(req) {
 				const { filename, body } = file;
 
 				const publicDir = join(__dirname, '..', '..', '..', 'public', 'preview', user, repo, 'sha', sha);
-				const fileData = gunzipSync(Buffer.from(body, 'base64'));
+				const fileData = gunzipSync(body);
 				fs.mkdirSync(join(publicDir, dirname(filename)), { recursive: true });
 				fs.writeFileSync(join(publicDir, filename), fileData);
 			}
@@ -47,9 +105,8 @@ async function preview(req) {
 				repo,
 			});
 			for (const file of files) {
-				const { filename, body } = file;
+				const { filename, body: Body } = file;
 
-				const Body = Buffer.from(body, 'base64');
 				const ContentType = mime.contentType(extname(filename)) || 'text/html';
 
 				const s3 = new aws.S3();
