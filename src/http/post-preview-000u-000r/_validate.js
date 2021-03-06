@@ -11,12 +11,12 @@ module.exports = function validate(req) {
 	const allowed = ['tc39', 'tc39-transfer'];
 	if (!allowed.some((a) => a === user)) {
 		return {
-			statusCode: 400,
+			statusCode: 401,
 		};
 	}
 
 	// Ensure the request is properly formed
-	if (!payload.pr || !payload.sha || !payload.files) {
+	if (!payload.pr || !payload.sha || (!payload.files && !payload.compressed)) {
 		return {
 			statusCode: 400,
 		};
