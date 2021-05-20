@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@architect/functions": "^3.13.9",
+    "@architect/functions": "^3.13.11",
     "@begin/data": "^1.2.3",
     "github-api": "^3.4.0"
   }

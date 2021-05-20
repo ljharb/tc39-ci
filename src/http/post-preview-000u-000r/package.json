@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "@architect/functions": "^3.13.9",
+    "@architect/functions": "^3.13.11",
     "@begin/data": "^1.2.3",
-    "mime-types": "^2.1.29",
+    "mime-types": "^2.1.30",
     "tar-stream": "^2.2.0",
     "tiny-json-http": "^7.3.0"
   }
