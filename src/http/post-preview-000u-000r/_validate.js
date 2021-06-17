@@ -8,7 +8,7 @@ module.exports = function validate(req) {
 	const payload = req.body;
 
 	// Only allow requests from the following orgs / owners
-	const allowed = ['tc39', 'tc39-transfer'];
+	const allowed = ['tc39', 'tc39-transfer', 'ljharb'];
 	if (!allowed.some((a) => a === user)) {
 		return {
 			statusCode: 401,
