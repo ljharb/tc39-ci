@@ -49,6 +49,7 @@ module.exports = async function verify(req) {
 		});
 
 		if (!shaIsReal || shaHasBeenSeen) {
+			console.error(JSON.stringify({ sha, shaIsReal, shaHasBeenSeen }));
 			return {
 				statusCode: 403,
 			};
