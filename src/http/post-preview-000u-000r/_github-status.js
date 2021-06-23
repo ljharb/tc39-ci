@@ -3,8 +3,6 @@
 const { post } = require('tiny-json-http');
 
 const {
-	GITHUB_OWNER,
-	GITHUB_REPO,
 	GITHUB_TOKEN,
 	NODE_ENV,
 } = process.env;
@@ -16,7 +14,6 @@ module.exports = async function updateStatus({
 	user,
 	repo,
 }) {
-
 	// verify state
 	const allow = [
 		'error',
@@ -32,10 +29,6 @@ module.exports = async function updateStatus({
 	if (!repo) { throw new ReferenceError('missing repo'); }
 
 	if (state === 'success' && !pr) { throw new ReferenceError('missing pull request ID'); }
-
-	if (!GITHUB_OWNER) { throw new ReferenceError('missing env var GITHUB_OWNER'); }
-
-	if (!GITHUB_REPO) { throw new ReferenceError('missing env var GITHUB_REPO'); }
 
 	if (!GITHUB_TOKEN) { throw new ReferenceError('missing env var GITHUB_TOKEN'); }
 
@@ -55,8 +48,12 @@ module.exports = async function updateStatus({
 	}
 
 	const github = 'https://api.github.com';
+	const url = `${github}/repos/${user}/${repo}/statuses/${sha}`;
+
+	console.info(`posting github status: url: ${url}, data: ${JSON.stringify(data)}`);
+	
 	return post({
-		url: `${github}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/statuses/${sha}`,
+		url,
 		headers: { Authorization: `token ${GITHUB_TOKEN}` },
 		data,
 	});
