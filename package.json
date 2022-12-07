@@ -9,7 +9,7 @@
     "publish": "node tools/publish-preview.js"
   },
   "devDependencies": {
-    "@architect/sandbox": "^4.5.2",
+    "@architect/sandbox": "^5.4.1",
     "@begin/data": "^1.2.3",
     "@ljharb/eslint-config": "^21.0.0",
     "cross-env": "^7.0.3",
