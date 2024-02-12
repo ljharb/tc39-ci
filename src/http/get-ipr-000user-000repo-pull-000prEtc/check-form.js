@@ -132,9 +132,15 @@ const googlersP = authorsP
 	.then((entries) => new Map(entries));
 
 Promise.all([
-	usernamesP, authorsP, delegatesP, googlersP,
+	usernamesP,
+	authorsP,
+	delegatesP,
+	googlersP,
 ]).then(([
-	usernames, authors, delegates, googlers,
+	usernames,
+	authors,
+	delegates,
+	googlers,
 ]) => {
 	const missing = authors.filter((a) => !usernames.has(a) && !delegates.has(a) && !googlers.get(a));
 	if (missing.length > 0) {
