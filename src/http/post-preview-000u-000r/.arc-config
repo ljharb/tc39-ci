@@ -1,4 +1,4 @@
 @aws
-runtime nodejs12.x
+runtime nodejs18.x
 memory 3008
 timeout 30
