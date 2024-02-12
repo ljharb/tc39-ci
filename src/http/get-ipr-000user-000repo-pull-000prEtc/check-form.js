@@ -119,7 +119,7 @@ const usernamesP = request(sheetData).then((json) => JSON.parse(json)).then((dat
 	}
 	const usernames = data.values
 		.flat(1)
-		.map((x) => x.replace(/^(https?:\/\/)?github\.com\//, '').replace(/^@/, ''))
+		.map((x) => x.replace(/^(?:https?:\/\/)?github\.com\//, '').replace(/^@/, ''))
 		.filter((x) => (/^[a-z0-9_-]{1,39}$/gi).test(x))
 		.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 	console.log(`Found usernames: ${usernames.join(',')}\n`);

@@ -5,10 +5,7 @@ module.exports = {
 		node: true,
 		es6: true,
 	},
-	'extends': '@ljharb',
-	parserOptions: {
-		ecmaVersion: 2018,
-	},
+	extends: '@ljharb/eslint-config/node/12',
 	rules: {
 		camelcase: [
 			'error', {

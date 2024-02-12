@@ -51,7 +51,7 @@ module.exports = async function updateStatus({
 	const url = `${github}/repos/${user}/${repo}/statuses/${sha}`;
 
 	console.info(`posting github status: url: ${url}, data: ${JSON.stringify(data)}`);
-	
+
 	return post({
 		url,
 		headers: { Authorization: `token ${GITHUB_TOKEN}` },
