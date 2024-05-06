@@ -15,7 +15,7 @@ const {
 const { Readable } = require('stream');
 
 const tar = require('tar-stream');
-const AwsLite = require('@aws-lite/client');
+const awsLite = require('@aws-lite/client');
 const arc = require('@architect/functions');
 const data = require('@begin/data');
 const validate = require('./_validate');
@@ -109,10 +109,11 @@ async function preview(req) {
 
 				const ContentType = mime.contentType(extname(filename)) || 'text/html';
 
-				const aws = new AwsLite({ plugins: [import('@aws-lite/s3')] });
+				const aws = await awsLite({ plugins: [import('@aws-lite/s3')] }); // eslint-disable-line no-await-in-loop
+				const root = process.env.ARC_STATIC_FOLDER ? `${process.env.ARC_STATIC_FOLDER}/` : '';
 				const params = {
-					ACL: 'public-read',
-					Key: `${process.env.ARC_STATIC_FOLDER}/preview/${user}/${repo}/sha/${sha}/${filename}`,
+					// ACL: 'public-read',
+					Key: `${root}preview/${user}/${repo}/sha/${sha}/${filename}`,
 					Bucket: process.env.ARC_STATIC_BUCKET,
 					Body,
 					ContentType,
