@@ -15,7 +15,7 @@ const {
 const { Readable } = require('stream');
 
 const tar = require('tar-stream');
-const aws = require('aws-sdk');
+const AwsLite = require('@aws-lite/client');
 const arc = require('@architect/functions');
 const data = require('@begin/data');
 const validate = require('./_validate');
@@ -109,7 +109,7 @@ async function preview(req) {
 
 				const ContentType = mime.contentType(extname(filename)) || 'text/html';
 
-				const s3 = new aws.S3();
+				const aws = new AwsLite({ plugins: [import('@aws-lite/s3')] });
 				const params = {
 					ACL: 'public-read',
 					Key: `${process.env.ARC_STATIC_FOLDER}/preview/${user}/${repo}/sha/${sha}/${filename}`,
@@ -118,8 +118,7 @@ async function preview(req) {
 					ContentType,
 					ContentEncoding: 'gzip',
 				};
-				const put = s3.putObject(params);
-				await put.promise(); // eslint-disable-line no-await-in-loop
+				await aws.s3.PutObject(params); // eslint-disable-line no-await-in-loop, new-cap
 			}
 			await github({
 				state: 'success',

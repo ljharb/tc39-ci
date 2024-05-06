@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@architect/functions": "^8.1.1",
+    "@aws-lite/client": "^0.21.1",
+    "@aws-lite/s3": "^0.1.21",
     "@begin/data": "^5.0.3",
     "github-api": "^0.10.7",
     "mime-types": "^2.1.35",
