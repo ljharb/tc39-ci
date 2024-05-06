@@ -57,7 +57,7 @@ const formatters = {
 };
 
 const {
-	GH_TOKEN,
+	GITHUB_TOKEN,
 	GOOGLE_API_KEY,
 } = process.env;
 
@@ -93,7 +93,7 @@ exports.handler = async function http(req) {
 
 		result = String(execSync(`node ${path.relative(process.cwd(), path.join(__dirname, './check-form'))} ${user}/${repo} ${sha}`, {
 			env: {
-				...process.env, GOOGLE_API_KEY, GH_TOKEN,
+				...process.env, GOOGLE_API_KEY, GITHUB_TOKEN,
 			},
 		}));
 		success = true;

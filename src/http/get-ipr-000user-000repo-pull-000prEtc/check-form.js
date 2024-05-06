@@ -21,8 +21,8 @@ const [
 if (!slug || !branch) {
 	throw 'args required: slug, branch';
 }
-if (!process.env.GH_TOKEN) {
-	throw 'GH_TOKEN env var required';
+if (!process.env.GITHUB_TOKEN) {
+	throw 'GITHUB_TOKEN env var required';
 }
 if (!key) {
 	throw 'GOOGLE_API_KEY env var required';
@@ -42,7 +42,7 @@ const request = async (url, method = 'GET', postData = undefined) => {
 		port: port || url.startsWith('https://') ? 443 : 80,
 		method,
 		headers: {
-			Authorization: `token ${process.env.GH_TOKEN}`,
+			Authorization: `token ${process.env.GITHUB_TOKEN}`,
 			'User-Agent': 'curl/7.54.0',
 		},
 	};
