@@ -2,7 +2,7 @@
 
 /* eslint no-magic-numbers: 0 */
 
-module.exports = function validate(req) {
+module.exports = async function validate(req) {
 	const { path } = req;
 	const { k: kind, etc } = req.pathParameters;
 

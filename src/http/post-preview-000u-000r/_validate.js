@@ -5,7 +5,7 @@
 /**
  * Ensure the payload is of the correct format and from an allowed GitHub org / owner
  */
-module.exports = function validate(req) {
+module.exports = async function validate(req) {
 	const { u: user } = req.pathParameters;
 	const payload = req.body;
 

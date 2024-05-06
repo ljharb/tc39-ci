@@ -166,4 +166,4 @@ async function preview(req) {
 	}
 }
 
-exports.handler = arc.http.async(validate, verify, preview);
+exports.handler = arc.http(validate, verify, preview);

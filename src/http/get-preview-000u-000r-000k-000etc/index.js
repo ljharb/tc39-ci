@@ -49,4 +49,4 @@ async function handler(req) {
 	};
 }
 
-exports.handler = arc.http.async(validate, handler);
+exports.handler = arc.http(validate, handler);
