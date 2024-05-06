@@ -35,7 +35,7 @@ module.exports = async function updateStatus({
 	const base = ARC_ENV === 'staging' ? 'staging.ci.tc39.es' : 'ci.tc39.es';
 	const data = {
 		state,
-		context: 'Begin.com build preview',
+		context: 'TC39 CI / build preview',
 	};
 
 	if (state === 'error') { data.description = 'An error occurred'; }
