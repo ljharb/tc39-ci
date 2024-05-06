@@ -3,6 +3,7 @@
 /* eslint no-magic-numbers: 0 */
 
 const arc = require('@architect/functions');
+const asap = require('@architect/asap');
 const data = require('@begin/data');
 const validate = require('./_validate');
 
@@ -19,8 +20,7 @@ async function handler(req) {
 		if (sha) {
 			// These URLs' contents are immutable so cache 'em forever
 			const cacheControl = 'max-age=315360000';
-			const proxy = arc.http.proxy.public({ cacheControl });
-			return proxy(req);
+			return asap({ cacheControl });
 		}
 	}
 

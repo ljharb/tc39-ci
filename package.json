@@ -9,6 +9,7 @@
     "publish": "node tools/publish-preview.js"
   },
   "dependencies": {
+    "@architect/asap": "^7.0.10",
     "@architect/functions": "^8.1.1",
     "@aws-lite/client": "^0.21.1",
     "@aws-lite/s3": "^0.1.21",
