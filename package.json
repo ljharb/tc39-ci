@@ -1,7 +1,7 @@
 {
-  "name": "begin-app",
+  "name": "tc39-ci",
   "version": "0.0.7",
-  "description": "Begin basic Hello World! app",
+  "description": "Publishes TC39 drafts and updates to S3",
   "scripts": {
     "lint": "eslint . --ignore-pattern node_modules --fix",
     "start": "cross-env NODE_ENV=testing npx sandbox",
