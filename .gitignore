@@ -1,5 +1,7 @@
 .arc-env
 .DS_Store
+.env
 node_modules
-public/
 out/
+public/
+scratch/
