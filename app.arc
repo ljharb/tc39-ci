@@ -1,5 +1,5 @@
 @app
-wander-qka
+tc39-ci
 
 @static
 
