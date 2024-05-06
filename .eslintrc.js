@@ -1,7 +1,9 @@
 'use strict';
 
+/* eslint no-magic-numbers: 0 */
+
 module.exports = {
-	extends: '@ljharb/eslint-config/node/18',
+	extends: '@ljharb/eslint-config/node/20',
 	rules: {
 		camelcase: [
 			'error', {

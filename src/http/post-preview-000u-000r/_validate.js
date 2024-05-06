@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-magic-numbers: 0 */
+
 /**
  * Ensure the payload is of the correct format and from an allowed GitHub org / owner
  */

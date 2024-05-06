@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-magic-numbers: 0 */
+
 const data = require('@begin/data');
 const { get } = require('tiny-json-http');
 

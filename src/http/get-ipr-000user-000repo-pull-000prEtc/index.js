@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-magic-numbers: 0 */
+
 const path = require('path');
 const { execSync } = require('child_process');
 const GitHub = require('github-api');

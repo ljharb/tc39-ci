@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-magic-numbers: 0 */
+
 const arc = require('@architect/functions');
 const data = require('@begin/data');
 const validate = require('./_validate');

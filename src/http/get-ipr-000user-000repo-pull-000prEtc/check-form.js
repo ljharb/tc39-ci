@@ -2,7 +2,7 @@
 
 'use strict';
 
-/* eslint no-throw-literal: 0 */
+/* eslint no-throw-literal: 0, no-magic-numbers: 0 */
 
 // web URL: `https://docs.google.com/spreadsheets/d/${sheetID}/edit`
 const sheetID = '1if5bU0aV5MJ27GGKnRzyAozeKP-ILXYl5r3dzvkGFmg';
