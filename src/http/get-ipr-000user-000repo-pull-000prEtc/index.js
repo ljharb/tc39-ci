@@ -4,9 +4,9 @@
 
 const path = require('path');
 const { execSync } = require('child_process');
-const GitHub = require('github-api');
+const { Octokit } = require('@octokit/rest');
 
-const gh = new GitHub();
+const octokit = new Octokit({});
 
 function html({
 	user, repo, pr, sha, result, success,
@@ -62,9 +62,13 @@ const {
 } = process.env;
 
 async function getSHA(user, repo, pr) {
-	const ghRepo = await gh.getRepo(user, repo);
-	const ghPR = await ghRepo.getPullRequest(pr);
-	const { data: { head: { sha } } } = ghPR;
+	const ghPR = await octokit.rest.pulls.get({
+		owner: user,
+		repo,
+		pull_number: pr,
+	});
+	const sha = ghPR?.data?.head?.sha;
+	if (!sha) { throw new ReferenceError('No PR SHA found'); }
 	return sha;
 }
 
@@ -82,8 +86,9 @@ exports.handler = async function http(req) {
 	let success = false;
 	let sha;
 	try {
-		sha = await getSHA(user, repo, pr).catch(() => {
-			throw new Error('Unable to connect to Github');
+		sha = await getSHA(user, repo, pr).catch((err) => {
+			console.error(err);
+			throw new Error('Unable to connect to GitHub or SHA not found');
 		});
 
 		result = String(execSync(`node ${path.relative(process.cwd(), path.join(__dirname, './check-form'))} ${user}/${repo} ${sha}`, {

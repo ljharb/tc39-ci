@@ -13,7 +13,7 @@
     "@aws-lite/client": "^0.21.1",
     "@aws-lite/s3": "^0.1.21",
     "@begin/data": "^5.0.3",
-    "github-api": "^0.10.7",
+    "@octokit/rest": "^20.1.1",
     "mime-types": "^2.1.35",
     "tar-stream": "^3.1.7"
   },
