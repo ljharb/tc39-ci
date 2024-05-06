@@ -4,7 +4,7 @@ const { post } = require('tiny-json-http');
 
 const {
 	GITHUB_TOKEN,
-	NODE_ENV,
+	ARC_ENV,
 } = process.env;
 
 module.exports = async function updateStatus({
@@ -32,7 +32,7 @@ module.exports = async function updateStatus({
 
 	if (!GITHUB_TOKEN) { throw new ReferenceError('missing env var GITHUB_TOKEN'); }
 
-	const base = NODE_ENV === 'staging' ? 'staging.ci.tc39.es' : 'ci.tc39.es';
+	const base = ARC_ENV === 'staging' ? 'staging.ci.tc39.es' : 'ci.tc39.es';
 	const data = {
 		state,
 		context: 'Begin.com build preview',

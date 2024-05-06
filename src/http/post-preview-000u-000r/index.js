@@ -22,7 +22,7 @@ const validate = require('./_validate');
 const verify = require('./_verify');
 const mime = require('mime-types');
 
-const isLocal = process.env.NODE_ENV === 'testing';
+const isLocal = process.env.ARC_ENV === 'testing';
 
 /*
  * takes a buffer holding a brotli-compressed tar and returns a list of { filename, body } objects
