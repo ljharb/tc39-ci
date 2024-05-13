@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports = function validate(req) {
+/* eslint no-magic-numbers: 0 */
+
+module.exports = async function validate(req) {
 	const { path } = req;
 	const { k: kind, etc } = req.pathParameters;
 

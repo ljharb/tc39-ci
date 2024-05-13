@@ -1,7 +1,0 @@
-{
-  "name": "begin-app-get-preview-000user-000repo-pull-000pr",
-  "dependencies": {
-    "@architect/functions": "^3.13.11",
-    "@begin/data": "^1.2.3"
-  }
-}

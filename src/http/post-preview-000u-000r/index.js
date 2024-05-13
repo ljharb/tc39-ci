@@ -15,14 +15,14 @@ const {
 const { Readable } = require('stream');
 
 const tar = require('tar-stream');
-const aws = require('aws-sdk');
+const awsLite = require('@aws-lite/client');
 const arc = require('@architect/functions');
 const data = require('@begin/data');
 const validate = require('./_validate');
 const verify = require('./_verify');
 const mime = require('mime-types');
 
-const isLocal = process.env.NODE_ENV === 'testing';
+const isLocal = process.env.ARC_ENV === 'testing';
 
 /*
  * takes a buffer holding a brotli-compressed tar and returns a list of { filename, body } objects
@@ -109,17 +109,17 @@ async function preview(req) {
 
 				const ContentType = mime.contentType(extname(filename)) || 'text/html';
 
-				const s3 = new aws.S3();
+				const aws = await awsLite({ plugins: [import('@aws-lite/s3')] }); // eslint-disable-line no-await-in-loop
+				const root = process.env.ARC_STATIC_FOLDER ? `${process.env.ARC_STATIC_FOLDER}/` : '';
 				const params = {
-					ACL: 'public-read',
-					Key: `${process.env.ARC_STATIC_FOLDER}/preview/${user}/${repo}/sha/${sha}/${filename}`,
+					// ACL: 'public-read',
+					Key: `${root}preview/${user}/${repo}/sha/${sha}/${filename}`,
 					Bucket: process.env.ARC_STATIC_BUCKET,
 					Body,
 					ContentType,
 					ContentEncoding: 'gzip',
 				};
-				const put = s3.putObject(params);
-				await put.promise(); // eslint-disable-line no-await-in-loop
+				await aws.s3.PutObject(params); // eslint-disable-line no-await-in-loop, new-cap
 			}
 			await github({
 				state: 'success',
@@ -167,4 +167,4 @@ async function preview(req) {
 	}
 }
 
-exports.handler = arc.http.async(validate, verify, preview);
+exports.handler = arc.http(validate, verify, preview);

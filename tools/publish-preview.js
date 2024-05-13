@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint no-magic-numbers: 0 */
+
 const { join } = require('path');
 const glob = require('glob').sync;
 const tiny = require('tiny-json-http');

@@ -1,21 +1,30 @@
 {
-  "name": "begin-app",
+  "name": "tc39-ci",
   "version": "0.0.7",
-  "description": "Begin basic Hello World! app",
+  "description": "Publishes TC39 drafts and updates to S3",
   "scripts": {
     "lint": "eslint . --ignore-pattern node_modules --fix",
-    "start": "cross-env NODE_ENV=testing npx sandbox",
-    "test": "echo 'tests skipped' || cross-env NODE_ENV=testing PORT=6666 tape test/*-test.js ./test/**/*-test.js | faucet",
+    "start": "arc sandbox",
+    "test": "echo 'tests skipped' || tape 'test/**/*-test.js' | faucet",
     "publish": "node tools/publish-preview.js"
   },
+  "dependencies": {
+    "@architect/asap": "^7.0.10",
+    "@architect/functions": "^8.1.1",
+    "@aws-lite/client": "^0.21.1",
+    "@aws-lite/s3": "^0.1.21",
+    "@begin/data": "^5.0.3",
+    "@octokit/rest": "^20.1.1",
+    "mime-types": "^2.1.35",
+    "tar-stream": "^3.1.7"
+  },
   "devDependencies": {
-    "@architect/sandbox": "^4.5.2",
-    "@begin/data": "^1.2.3",
+    "@architect/architect": "^11.0.12",
     "@ljharb/eslint-config": "^21.1.0",
-    "cross-env": "^7.0.3",
     "eslint": "=8.8.0",
     "faucet": "^0.0.4",
-    "tape": "^5.7.4",
+    "glob": "^10.3.12",
+    "tape": "^5.7.5",
     "tiny-json-http": "^7.5.1"
   },
   "private": true
