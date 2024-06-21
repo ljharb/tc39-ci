@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@architect/asap": "^7.0.10",
-    "@architect/functions": "^8.1.1",
-    "@aws-lite/client": "^0.21.1",
-    "@aws-lite/s3": "^0.1.21",
-    "@begin/data": "^5.0.3",
+    "@architect/functions": "^8.1.6",
+    "@aws-lite/client": "^0.21.10",
+    "@aws-lite/s3": "^0.1.22",
+    "@begin/data": "^5.0.5",
     "@octokit/rest": "^20.1.1",
     "mime-types": "^2.1.35",
     "tar-stream": "^3.1.7"
