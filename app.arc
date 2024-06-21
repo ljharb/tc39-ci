@@ -13,3 +13,6 @@ data
   scopeID *String
   dataID **String
   ttl TTL
+
+@aws
+region us-west-1
